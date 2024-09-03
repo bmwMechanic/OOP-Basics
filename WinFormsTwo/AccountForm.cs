@@ -12,46 +12,88 @@ namespace WinFormsTwo
 {
     public partial class AccountForm : Form
     {
+
+        /**NOW:
+         *  a.Balance = 1000;     -->   SET-Method is called
+         *  decimal bal = a.Balance; -> GET-Method is called
+         */
         public AccountForm()
         {
             InitializeComponent();
         }
 
-        Account a;
-
-        private void txtName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+        Account a; //Declaration needed b/c I need global variable a that references to Obj.
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-
+            a = new Account();
+            Account a1 = new Account(654321,"a1Name",100000);
+            Account a2 = new Account(a1);   //Fail at new Account(a), b/c there's no Name initialized, b/c created by DEFAULT CONSTRUCTOR method! copy the correct object dude...
         }
 
         private void btnSet_Click(object sender, EventArgs e)
         {
-
+            a.ID = int.Parse(txtID.Text);
+            a.Name = txtName.Text;
+            //a.Balance = int.Parse(txtBalance.Text);   balance is read-only
         }
 
         private void btnGet_Click(object sender, EventArgs e)
         {
-
+            txtID.Text = a.ID.ToString();
+            txtName.Text = a.Name;
+            txtBalance.Text = a.Balance.ToString();
         }
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-
+            txtID.Text = "";
+            txtName.Text = "";
+            txtBalance.Text = "";
         }
 
         private void btnDestroy_Click(object sender, EventArgs e)
         {
-
+            a = null;
         }
 
         private void btnGC_Click(object sender, EventArgs e)
         {
+            GC.Collect();   //this affects cpu pretty much b/c it's another thread extra
+            // our code needs one thread
+        }
 
+        private void btnTemp_Click(object sender, EventArgs e)
+        {
+            Account a1 = new Account();
+            a = a1;
+            //if I create normal, enter values, create temp, clear and get --> no values :)
+            // b/c "old" object referenced by "old" a get gc, a references to new Obj w/ no values 
+        }
+
+        private void btnGetGeneration_Click(object sender, EventArgs e)
+        {
+            /*why generation?-->Threads!
+             * so b/c of GC! heap is equally divided into 3 parts by CLR
+             * HEAP: Gen0: objects creation; when full->GC activated; existing obj w/ ref
+             * Gen1: will be then stored here. At some point of time G0 AND G1 will be full:
+             *       GC activated, those with ref will be promoted to G2! G1 is empty, G0 is not empty
+             * Gen2: only objects, that last longest in memory.
+             * why cool:
+             */
+            System.Windows.Forms.MessageBox.Show(GC.GetGeneration(a).ToString());
+        }
+
+        private void btnDeposit_Click(object sender, EventArgs e)
+        {
+            a.Deposit(decimal.Parse(txtAmount.Text));
+            btnGet_Click(sender, e); //my own idea yeah :) it works fine! the function just needs a sender object and an e EventArgs as parameters
+        }
+
+        private void btnWithdraw_Click(object sender, EventArgs e)
+        {
+            a.Withdraw(decimal.Parse(txtAmount.Text));
+            btnGet_Click(sender, e);
         }
     }
 }

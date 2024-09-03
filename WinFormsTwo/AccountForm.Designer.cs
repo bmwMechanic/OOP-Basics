@@ -40,6 +40,11 @@
             this.txtBalance = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.btnTemp = new System.Windows.Forms.Button();
+            this.btnGetGeneration = new System.Windows.Forms.Button();
+            this.btnDeposit = new System.Windows.Forms.Button();
+            this.btnWithdraw = new System.Windows.Forms.Button();
+            this.txtAmount = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txtID
@@ -150,11 +155,63 @@
             this.label3.TabIndex = 12;
             this.label3.Text = "Balance";
             // 
+            // btnTemp
+            // 
+            this.btnTemp.Location = new System.Drawing.Point(53, 228);
+            this.btnTemp.Name = "btnTemp";
+            this.btnTemp.Size = new System.Drawing.Size(75, 30);
+            this.btnTemp.TabIndex = 13;
+            this.btnTemp.Text = "Temp";
+            this.btnTemp.UseVisualStyleBackColor = true;
+            this.btnTemp.Click += new System.EventHandler(this.btnTemp_Click);
+            // 
+            // btnGetGeneration
+            // 
+            this.btnGetGeneration.Location = new System.Drawing.Point(171, 228);
+            this.btnGetGeneration.Name = "btnGetGeneration";
+            this.btnGetGeneration.Size = new System.Drawing.Size(189, 30);
+            this.btnGetGeneration.TabIndex = 14;
+            this.btnGetGeneration.Text = "Get Generation";
+            this.btnGetGeneration.UseVisualStyleBackColor = true;
+            this.btnGetGeneration.Click += new System.EventHandler(this.btnGetGeneration_Click);
+            // 
+            // btnDeposit
+            // 
+            this.btnDeposit.Location = new System.Drawing.Point(53, 296);
+            this.btnDeposit.Name = "btnDeposit";
+            this.btnDeposit.Size = new System.Drawing.Size(75, 30);
+            this.btnDeposit.TabIndex = 15;
+            this.btnDeposit.Text = "Deposit";
+            this.btnDeposit.UseVisualStyleBackColor = true;
+            this.btnDeposit.Click += new System.EventHandler(this.btnDeposit_Click);
+            // 
+            // btnWithdraw
+            // 
+            this.btnWithdraw.Location = new System.Drawing.Point(287, 296);
+            this.btnWithdraw.Name = "btnWithdraw";
+            this.btnWithdraw.Size = new System.Drawing.Size(75, 30);
+            this.btnWithdraw.TabIndex = 16;
+            this.btnWithdraw.Text = "Withdraw";
+            this.btnWithdraw.UseVisualStyleBackColor = true;
+            this.btnWithdraw.Click += new System.EventHandler(this.btnWithdraw_Click);
+            // 
+            // txtAmount
+            // 
+            this.txtAmount.Location = new System.Drawing.Point(159, 302);
+            this.txtAmount.Name = "txtAmount";
+            this.txtAmount.Size = new System.Drawing.Size(100, 20);
+            this.txtAmount.TabIndex = 17;
+            // 
             // AccountForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(438, 226);
+            this.ClientSize = new System.Drawing.Size(461, 376);
+            this.Controls.Add(this.txtAmount);
+            this.Controls.Add(this.btnWithdraw);
+            this.Controls.Add(this.btnDeposit);
+            this.Controls.Add(this.btnGetGeneration);
+            this.Controls.Add(this.btnTemp);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtBalance);
@@ -187,6 +244,11 @@
         private System.Windows.Forms.TextBox txtBalance;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnTemp;
+        private System.Windows.Forms.Button btnGetGeneration;
+        private System.Windows.Forms.Button btnDeposit;
+        private System.Windows.Forms.Button btnWithdraw;
+        private System.Windows.Forms.TextBox txtAmount;
     }
 }
 
