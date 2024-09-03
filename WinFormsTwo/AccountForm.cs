@@ -26,9 +26,11 @@ namespace WinFormsTwo
 
         private void btnCreate_Click(object sender, EventArgs e)
         {
-            a = new Account();
-            Account a1 = new Account(654321,"a1Name",100000);
-            Account a2 = new Account(a1);   //Fail at new Account(a), b/c there's no Name initialized, b/c created by DEFAULT CONSTRUCTOR method! copy the correct object dude...
+            a = new Account();      //one constructor
+            Account a1 = new Account(654321,"a1Name",100000);   //one param. constructor + this()
+            Account a2 = new Account(a1); //one this(a1), one this(params), one this()  //Fail at new Account(a), b/c there's no Name initialized, b/c created by DEFAULT CONSTRUCTOR method! copy the correct object dude...
+            /* b/c constr. are called after obj is created, in lines above there will be 3 objects, but 6 constructors will be called! */
+            //a1 + object ref by a1, a2 + obj ref by a2 are destroyed after exiting this method ;)
         }
 
         private void btnSet_Click(object sender, EventArgs e)

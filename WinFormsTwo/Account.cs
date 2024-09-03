@@ -12,11 +12,6 @@ namespace WinFormsTwo
         private int iD;
         private string name;
         private decimal balance;   //in AccForms we do not want to change Balance, but we want to see the balance; we want to GET the Balance
-        private bool iDAlreadySet = false;
-        private bool nameAlreadySet = false;
-        private string privateSetExample;
-        private string privateSetExample2;
-        private bool privateBoolExample = false;    //no get|set just for demonstration below in ExampleMethod1......
 
         //something else:   IMPLICIT IMPLEMENTATION;; --  ALT+SHIFT + DownArrow and type  --
         public string Api { get; set; } // dynamic info requests from API-interfaces need to be implemented implicitly
@@ -24,12 +19,18 @@ namespace WinFormsTwo
         //if the class does not have any constructor the compiler will add one by default like this:  public ClassName(){}
         //if I choose to have a parameterized one and I additionally want to create an object with a parameterless constructor, it will not work.
         //then I have to add the parameterless constructor on my own. like this:  public ClassName(){}
-
+        //OBJECT IS CREATED THEREFORE CONSTRUCTOR IS CALLED, then parameterized c is called... it's still just a function!
         public Account() { /*common code for all constructors*/ } //parameterless constructor!
         public Account(int inputID, string inputName, decimal inputBalance) : this() { this.ID = inputID; this.Name = inputName; this.Balance = inputBalance; } //parameterized constructor! --> usually used for initialization of Field members. don't bypass Name-Property b/c of set-Method explained above
         //public Account(Account a) { this.ID = a.ID; this.Name = a.Name; this.Balance = a.Balance; } //Copy Constructor when we set a1=a it's still the same object the variables are referring to. sooo copy the OBJECT with another variable of course :). Example: a1=new Accout(a);
         //COPY CONSTRUCTOR made easily (eventually haha)
         public Account(Account a) : this(a.iD, a.name, a.balance) { }   //so yeah that's the deal. As a beginner I like the longer version
+        
+
+        //Destructor OR Finalize Method!
+        //important in i.e. C++ b/c if the constr. of one class create an object of a different type, and we destroy inital object, the other still exists... therefore --> destructor that destroys the 2nd object
+        ~Account() {  } //99.9% in .NET don't worry about destructor. but outside, it is needed --> so write GC.Collect(); inside Destructor
+        //if we use other frameworks than .NET (i.e. angular?), it's saved in unmanaged heap - no GC is working there!
 
         //from here on Properties
         public decimal Balance  //public Balance cannot store data! it's just there to access private FIELDS :))
@@ -44,7 +45,7 @@ namespace WinFormsTwo
                 this.balance = value;
             }
         }
-
+        private bool nameAlreadySet = false;
         public string Name  //public Balance cannot store data! it's just there to access private FIELDS :))
         {
             get
@@ -72,6 +73,7 @@ namespace WinFormsTwo
             }
         }
 
+        private bool iDAlreadySet = false;
         public int ID   //iD should be set only once!
         {
             get
@@ -148,6 +150,12 @@ namespace WinFormsTwo
             this.Balance += amount;
         }
 
+
+
+        //-------------------------//
+        private string privateSetExample;
+        private string privateSetExample2;
+        private bool privateBoolExample = false;    //no get|set just for demonstration below in ExampleMethod1......
         public void ExampleMehod1()
         {
             if (privateBoolExample)
