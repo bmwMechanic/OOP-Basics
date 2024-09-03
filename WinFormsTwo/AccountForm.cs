@@ -27,17 +27,17 @@ namespace WinFormsTwo
         private void btnCreate_Click(object sender, EventArgs e)
         {
             a = new Account();      //one constructor
-            Account a1 = new Account(654321,"a1Name",100000);   //one param. constructor + this()
-            Account a2 = new Account(a1); //one this(a1), one this(params), one this()  //Fail at new Account(a), b/c there's no Name initialized, b/c created by DEFAULT CONSTRUCTOR method! copy the correct object dude...
+   // b/c ID autoincr        Account a1 = new Account(654321,"a1Name",100000);   //one param. constructor w/3 params + this()
+   // b/c ID autoincr        Account a2 = new Account(a1); //one this(a1), one this(params), one this()  //Fail at new Account(a), b/c there's no Name initialized, b/c created by DEFAULT CONSTRUCTOR method! copy the correct object dude...
             /* b/c constr. are called after obj is created, in lines above there will be 3 objects, but 6 constructors will be called! */
-            //a1 + object ref by a1, a2 + obj ref by a2 are destroyed after exiting this method ;)
+            //a1 + object ref by a1, a2 + obj ref by a2 are destroyed after exiting this method ;) added for break point debugging right there
         }
 
-        private void btnSet_Click(object sender, EventArgs e)
+        private void btnSet_Click(object sender, EventArgs e)   //links von  istGleich ==> SET; var rechts vom istGleich ==> GET!
         {
-            a.ID = int.Parse(txtID.Text);
+            //a.ID = int.Parse(txtID.Text);
             a.Name = txtName.Text;
-            //a.Balance = int.Parse(txtBalance.Text);   balance is read-only
+            //a.Balance = int.Parse(txtBalance.Text);   balance is read-only for class-outsiders! (private set for public Balance, remember? ;) )
         }
 
         private void btnGet_Click(object sender, EventArgs e)
@@ -69,7 +69,7 @@ namespace WinFormsTwo
         {
             Account a1 = new Account();
             a = a1;
-            //if I create normal, enter values, create temp, clear and get --> no values :)
+            //if I create normal object, enter values, create temp, clear and get --> no values :) + 1st obj. ready for GC.Collect();
             // b/c "old" object referenced by "old" a get gc, a references to new Obj w/ no values 
         }
 
@@ -77,13 +77,13 @@ namespace WinFormsTwo
         {
             /*why generation?-->Threads!
              * so b/c of GC! heap is equally divided into 3 parts by CLR
-             * HEAP: Gen0: objects creation; when full->GC activated; existing obj w/ ref
-             * Gen1: will be then stored here. At some point of time G0 AND G1 will be full:
+             * HEAP: Gen0: objects creation; when full->GC activated; 
+             * Gen1: existing obj w/ ref will be then stored here. At some point of time G0 AND G1 will be full:
              *       GC activated, those with ref will be promoted to G2! G1 is empty, G0 is not empty
              * Gen2: only objects, that last longest in memory.
-             * why cool:
+             * why cool: Intelligent Automatic Garbage Collection
              */
-            System.Windows.Forms.MessageBox.Show(GC.GetGeneration(a).ToString());
+            System.Windows.Forms.MessageBox.Show(GC.GetGeneration(a).ToString()/*+"\n"+GC.GetGeneration(a).GetType()*/);    //GC.GetGen returns INT32
         }
 
         private void btnDeposit_Click(object sender, EventArgs e)
@@ -96,6 +96,16 @@ namespace WinFormsTwo
         {
             a.Withdraw(decimal.Parse(txtAmount.Text));
             btnGet_Click(sender, e);
+        }
+
+        private void btnSetMB_Click(object sender, EventArgs e)
+        {
+            Account.MinBalance = decimal.Parse(txtMB.Text);
+        }
+
+        private void btnGetMB_Click(object sender, EventArgs e)
+        {
+            txtMB.Text = Account.MinBalance.ToString();
         }
     }
 }

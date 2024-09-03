@@ -8,6 +8,42 @@ namespace WinFormsTwo
 {
     public class Account    //here now: FULLY ENCAPSULATED CLASS; but what about private get and private set?
     {
+        //static members are also called class members! so:
+        //every object of Account class shall have this one or many or whatever static member fiels so the value is THE SAME for ALL objects of Account class!
+        //but why public Mr. Soni? let's see why... wait... no init, no get or set, just the same; but not constant.... ahh I still don't get it
+        public static decimal MinBalance = 0;    //MinBal is not under the Ownership of objects! It's accessed by Account.MinBalance = 0;
+        //when are static members loaded into allocated memory? When class member is called the first time or when object is initialized the first time!
+        //with the 1st usage of class member, CLR loads with the help of class Loader class into the allocated memory; one TYPE instance in CLR for all account objects!
+        //Account.MinBalance becomes a GLOBAL variable in the project, b/c it's public(answer to first lines), it can be set or gotten --> left side of =  = and right side of it as well;
+        //it can be used in any Class, in any File, in any Method! mostly I need encapsulation and interfaces, but sometimes a global variable can come in handy
+
+        //noW we are calling a STATIC CONSTRUCTOR!
+        static Account()        // gets called when CLASS is LOADED the FIRST TIME. it does not get called after any following initialization of Account Class
+        {
+            System.Windows.Forms.MessageBox.Show("Class is loaded. Thus, this displays only once.");
+            //Usually the static var gets its data from DB; HERE is the IDEAL place to place that exact code! WOW, that info is IMPORTANT!
+            /** obj creation in static constructor
+            *Account a = new Account();
+            *a.ID = 123456;
+            *the object is loaded, created and destroyed. Memory for ClassTable of CLR is still allocated :)
+            */
+        }
+        //a STATIC Construuctor cannot access MEMBER FIELDS or MEMBER PROPERTIES of classes, b/c they need to be instantiated!
+        //a static Constructor is also called a static FIELD INITIALIZER 
+
+        /** what happens when an object is created the first time?      1 - 3 only once
+         * 1. Class is loaded by CLR
+         * 2. Static Members are loaded and put in allocated memory for further usage (for futher instantiations of classes :) )
+         * 3. Static Constructor is executed
+         * 4. Object is created and Instance Members are loaded into allocated memory
+         * 5. Instance Constructor is executed
+         * 6. only 4+5 repeat for subsequent instantiation (=Instanziierung)
+         * 
+         * THIS. is a reference to current object; THIS. cannot be used for static class members!
+         */
+
+        //in short: static members are the same for all objects of that class, unlike instance members which differ from object to object :)
+
         //here only fields!
         private int iD;
         private string name;
@@ -15,16 +51,24 @@ namespace WinFormsTwo
 
         //something else:   IMPLICIT IMPLEMENTATION;; --  ALT+SHIFT + DownArrow and type  --
         public string Api { get; set; } // dynamic info requests from API-interfaces need to be implemented implicitly
+                                        //get;set; b/c it CAN get or set private api field if existant;
 
         //if the class does not have any constructor the compiler will add one by default like this:  public ClassName(){}
         //if I choose to have a parameterized one and I additionally want to create an object with a parameterless constructor, it will not work.
         //then I have to add the parameterless constructor on my own. like this:  public ClassName(){}
         //OBJECT IS CREATED THEREFORE CONSTRUCTOR IS CALLED, then parameterized c is called... it's still just a function!
-        public Account() { /*common code for all constructors*/ } //parameterless constructor!
-        public Account(int inputID, string inputName, decimal inputBalance) : this() { this.ID = inputID; this.Name = inputName; this.Balance = inputBalance; } //parameterized constructor! --> usually used for initialization of Field members. don't bypass Name-Property b/c of set-Method explained above
+
+        private static int prevId;
+        public Account() 
+        { /*common code for all constructors*/ //i.e: auto increment id for each new object of Account class
+            prevId++;
+            this.iD = Account.prevId;
+        } //parameterless constructor!
+
+        public Account(string inputName, decimal inputBalance) : this() { this.Name = inputName; this.Balance = inputBalance; } //parameterized constructor! --> usually used for initialization of Field members. don't bypass Name-Property b/c of set-Method explained above
         //public Account(Account a) { this.ID = a.ID; this.Name = a.Name; this.Balance = a.Balance; } //Copy Constructor when we set a1=a it's still the same object the variables are referring to. sooo copy the OBJECT with another variable of course :). Example: a1=new Accout(a);
         //COPY CONSTRUCTOR made easily (eventually haha)
-        public Account(Account a) : this(a.iD, a.name, a.balance) { }   //so yeah that's the deal. As a beginner I like the longer version
+        public Account(Account a) : this( a.name, a.balance) { }   //so yeah that's the deal. As a beginner I like the longer version
         
 
         //Destructor OR Finalize Method!
@@ -46,7 +90,7 @@ namespace WinFormsTwo
             }
         }
         private bool nameAlreadySet = false;
-        public string Name  //public Balance cannot store data! it's just there to access private FIELDS :))
+        public string Name  //public Name cannot store data! it's just there to access private FIELDS :))
         {
             get
             {
@@ -80,20 +124,39 @@ namespace WinFormsTwo
             {
                 return this.iD;
             }
-            set
+            //set           //can be removed now, b/c iD is auto-incremented and set once; here: read-only
+            //{
+            //    if (iDAlreadySet)
+            //    {
+            //        throw new ApplicationException("ID is already set. Reset is not possible. Please contact account manager.");
+            //    }
+            //    else
+            //    { 
+            //        this.iD = value;
+            //        this.iDAlreadySet = true;
+            //    }
+            //}
+        }
+
+        public void Withdraw(decimal amount)    //now I can use public property Balance b/c it's setter is private and now we have one haha :)
+        {
+            if (this.Balance - amount < /*this.*/MinBalance) //"this." may not be used b/c this refers to a field or property of an OBJECT! STATIC FIELDS only by name themselves!
             {
-                if (iDAlreadySet)
-                {
-                    throw new ApplicationException("ID is already set. Reset is not possible. Please contact account manager.");
-                }
-                else
-                { 
-                    this.iD = value;
-                    this.iDAlreadySet = true;
-                }
+                throw new ApplicationException("Not enough funds for withdrawal");
+            }
+            else
+            {
+                this.Balance -= amount; //directly private field -- not any longer, b/c setter actived - PRIVATE setter activated
             }
         }
 
+        public void Deposit(decimal amount)
+        {
+            this.Balance += amount;
+        }
+
+
+        //-------------------------//
         public string PrivateSetExample
         {
             get
@@ -130,35 +193,15 @@ namespace WinFormsTwo
          * so in ExampleMethod1 - 3 I need to check if the value to be setted fits the rules
          * but in ExampleMethod10 - 30 I do not, b/c THERE IS a private set-METHOD which is used every time a value is to be set
          * When to use? yeah... Just don't forget it and it will be useful someday
-         * but it's clear: if there's no extra method that checks, it needs to be checked in each method :) 
+         * but it's clear: if there's no extra method that checks, it needs to be checked in each method separately :) 
          */
 
-        public void Withdraw(decimal amount)    //now I can use public property Balance b/c it's setter is private and now we have one haha :)
-        {
-            if(this.Balance - amount < 0)
-            {
-                throw new ApplicationException("Not enough funds for withdrawal");
-            }
-            else
-            {
-                this.Balance -= amount; //directly private field -- not any longer, b/c setter actived - PRIVATE setter activated
-            }
-        }
-
-        public void Deposit(decimal amount)
-        {
-            this.Balance += amount;
-        }
-
-
-
-        //-------------------------//
         private string privateSetExample;
         private string privateSetExample2;
         private bool privateBoolExample = false;    //no get|set just for demonstration below in ExampleMethod1......
         public void ExampleMehod1()
         {
-            if (privateBoolExample)
+            if (privateBoolExample)         //the bool has nothing to say, just there to be a code example, not to be run... 
             {
                 privateSetExample = "someStringForExamplePurposes1";
             }
