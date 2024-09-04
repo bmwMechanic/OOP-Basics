@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WinFormsTwo", "WinFormsTwo\WinFormsTwo.csproj", "{647F88C2-0BD3-4E78-B5F3-E32B8290B576}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InheritanceDemoApp", "InheritanceDemoApp\InheritanceDemoApp.csproj", "{E35CA306-1F67-450F-B2F2-7553FF2CEDAC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{647F88C2-0BD3-4E78-B5F3-E32B8290B576}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{647F88C2-0BD3-4E78-B5F3-E32B8290B576}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{647F88C2-0BD3-4E78-B5F3-E32B8290B576}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E35CA306-1F67-450F-B2F2-7553FF2CEDAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E35CA306-1F67-450F-B2F2-7553FF2CEDAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E35CA306-1F67-450F-B2F2-7553FF2CEDAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E35CA306-1F67-450F-B2F2-7553FF2CEDAC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
