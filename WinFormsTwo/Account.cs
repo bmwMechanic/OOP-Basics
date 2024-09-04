@@ -21,7 +21,7 @@ namespace WinFormsTwo
         //with the 1st usage of class member, CLR loads with the help of class Loader class into the allocated memory; one TYPE instance in CLR for all account objects!
         //Account.MinBalance becomes a GLOBAL variable in the project, b/c it's public(answer to first lines), it can be set or gotten --> left side of =  = and right side of it as well;
         //it can be used in any Class, in any File, in any Method! mostly I need encapsulation and interfaces, but sometimes a global variable can come in handy
-        //private static fields are 'global' classwide, public static fields are glogal to the whole project
+        //private static fields are 'global' classwide, public static fields are global to the whole project
         public static decimal MinBalance
         {
             get
@@ -50,6 +50,12 @@ namespace WinFormsTwo
         //a STATIC Construuctor cannot access MEMBER FIELDS or MEMBER PROPERTIES of classes, b/c they need to be instantiated!
         //a static Constructor is also called a static FIELD INITIALIZER 
         //a static DESTRUCTOR DOES NOT EXIST
+
+        /** need to know about the STATIC CONSTRUCTOR
+         *  1. Is "public static Account()" possible? No! Are we calling static Constr? No, Class Loader is! Where is Class Loader? - CLR! so never public!
+         *     With public we would change the Class Loader. This is neither acceptable nor feasible!
+         *  2. cannot be overloaded! Why? Rule says so.   
+         */
 
         /** what happens when an object is created the first time?      1 - 3 only once
          * 1. Class is loaded by CLR
@@ -89,7 +95,7 @@ namespace WinFormsTwo
         //public Account(Account a) { this.ID = a.ID; this.Name = a.Name; this.Balance = a.Balance; } //Copy Constructor when we set a1=a it's still the same object the variables are referring to. sooo copy the OBJECT with another variable of course :). Example: a1=new Accout(a);
         //COPY CONSTRUCTOR made for easy usage(l.73) (eventually haha)
         public Account(Account a) : this( a.name, a.balance) { }   //so yeah that's the deal. As a beginner I like the longer version
-        
+        //today I
 
         //Destructor OR Finalize Method!
         //important in i.e. C++ b/c if the constr. of one class create an object of a different type, and we destroy inital object, the other still exists... therefore --> destructor that destroys the 2nd object
