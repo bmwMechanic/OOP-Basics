@@ -27,8 +27,8 @@ namespace WinFormsTwo
         private void btnCreate_Click(object sender, EventArgs e)
         {
             a = new Account();      //one constructor
-   // b/c ID autoincr        Account a1 = new Account(654321,"a1Name",100000);   //one param. constructor w/3 params + this()
-   // b/c ID autoincr        Account a2 = new Account(a1); //one this(a1), one this(params), one this()  //Fail at new Account(a), b/c there's no Name initialized, b/c created by DEFAULT CONSTRUCTOR method! copy the correct object dude...
+            Account a1 = new Account("a1Name",100000);   //one param. constructor w/3 params + this()
+            Account a2 = new Account(a1); //one this(a1), one this(params), one this()  //Fail at new Account(a), b/c there's no Name initialized, b/c created by DEFAULT CONSTRUCTOR method! copy the correct object dude...
             /* b/c constr. are called after obj is created, in lines above there will be 3 objects, but 6 constructors will be called! */
             //a1 + object ref by a1, a2 + obj ref by a2 are destroyed after exiting this method ;) added for break point debugging right there
         }

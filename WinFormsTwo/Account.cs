@@ -8,19 +8,38 @@ namespace WinFormsTwo
 {
     public class Account    //here now: FULLY ENCAPSULATED CLASS; but what about private get and private set?
     {
+        /** Ahem, Properties {get;set;} can be static as well!
+         * i.e.: I want to put a restriction on MinBalance
+         */
+        private static decimal minBalance;
+
         //static members are also called class members! so:
         //every object of Account class shall have this one or many or whatever static member fiels so the value is THE SAME for ALL objects of Account class!
         //but why public Mr. Soni? let's see why... wait... no init, no get or set, just the same; but not constant.... ahh I still don't get it
-        public static decimal MinBalance = 0;    //MinBal is not under the Ownership of objects! It's accessed by Account.MinBalance = 0;
+        //MinBal is not under the Ownership of objects! It's accessed by Account.MinBalance = 0; Plus it's a FIELD Class member
         //when are static members loaded into allocated memory? When class member is called the first time or when object is initialized the first time!
         //with the 1st usage of class member, CLR loads with the help of class Loader class into the allocated memory; one TYPE instance in CLR for all account objects!
         //Account.MinBalance becomes a GLOBAL variable in the project, b/c it's public(answer to first lines), it can be set or gotten --> left side of =  = and right side of it as well;
         //it can be used in any Class, in any File, in any Method! mostly I need encapsulation and interfaces, but sometimes a global variable can come in handy
+        //private static fields are 'global' classwide, public static fields are glogal to the whole project
+        public static decimal MinBalance
+        {
+            get
+            {
+                return minBalance;
+            }
+            set
+            {
+                if (value >= 0 && value <= 500) { minBalance = value; }
+                else { throw new ApplicationException("Minimum Value must be between 0 and 500. You typed "+value); }
+            }
+        }
+        
 
         //noW we are calling a STATIC CONSTRUCTOR!
         static Account()        // gets called when CLASS is LOADED the FIRST TIME. it does not get called after any following initialization of Account Class
         {
-            System.Windows.Forms.MessageBox.Show("Class is loaded. Thus, this displays only once.");
+            System.Windows.Forms.MessageBox.Show("Class is loaded. Thus, this displays only once."); //return must not be provided! thus, here I need to say Console.WriteLine or MessageBox.Show()...
             //Usually the static var gets its data from DB; HERE is the IDEAL place to place that exact code! WOW, that info is IMPORTANT!
             /** obj creation in static constructor
             *Account a = new Account();
@@ -30,6 +49,7 @@ namespace WinFormsTwo
         }
         //a STATIC Construuctor cannot access MEMBER FIELDS or MEMBER PROPERTIES of classes, b/c they need to be instantiated!
         //a static Constructor is also called a static FIELD INITIALIZER 
+        //a static DESTRUCTOR DOES NOT EXIST
 
         /** what happens when an object is created the first time?      1 - 3 only once
          * 1. Class is loaded by CLR
@@ -67,7 +87,7 @@ namespace WinFormsTwo
 
         public Account(string inputName, decimal inputBalance) : this() { this.Name = inputName; this.Balance = inputBalance; } //parameterized constructor! --> usually used for initialization of Field members. don't bypass Name-Property b/c of set-Method explained above
         //public Account(Account a) { this.ID = a.ID; this.Name = a.Name; this.Balance = a.Balance; } //Copy Constructor when we set a1=a it's still the same object the variables are referring to. sooo copy the OBJECT with another variable of course :). Example: a1=new Accout(a);
-        //COPY CONSTRUCTOR made easily (eventually haha)
+        //COPY CONSTRUCTOR made for easy usage(l.73) (eventually haha)
         public Account(Account a) : this( a.name, a.balance) { }   //so yeah that's the deal. As a beginner I like the longer version
         
 
@@ -117,7 +137,7 @@ namespace WinFormsTwo
             }
         }
 
-        private bool iDAlreadySet = false;
+        //private bool iDAlreadySet = false;    //now not needed; ID sets itself automatically autoincrementing
         public int ID   //iD should be set only once!
         {
             get
@@ -155,9 +175,36 @@ namespace WinFormsTwo
             this.Balance += amount;
         }
 
+        /** when do I choose to label a Method to be static? How are they different from the instance members of the class?
+         * Q: are methods stored in allocated memory? - NO, methods are not stored for each object in allocated memory; only ONCE
+         * difference is the access of a static method: Account.StaticMethod1(); whereas insance method: a.Deposit(1000);
+         * IF I do NOT need instance members within A method (i.e. just needed parameters are forwarded ) - why should I create an object? This is the time to create a public STATIC method
+         * So call the static method via ClassName.MethodName(<params>); IMPORTANT: NOT a SINGLE instance MEMBER of the class may be used for STATIC class methods
+         * 
+         */
+        // Example for static method: I want to compare 2 obj. within one class.
+        public static Account GetAccountWithMoreBalance(Account a1, Account a2)     //no usage of current obj nor instance members
+        {   //static method --> GLOBAL METHOD
+            if (a1.Balance > a2.Balance)
+            {
+                return a1;
+            }
+            else return a2;
+        }// Class method: create 2obj to be compared and 3rd (a3) to get the returned obj: a3 = Account.GetAccountWithMoreBalance(a1,a2)
+        // is this possible: Account a3 = new (Account.GetAccountWithMoreBalance(a1,a2));? YESS! I tested it and it works perfectly
+
+        public Account GetAccountWithMoreBalance(Account otherObj)     //no usage of current obj nor instance members
+        {
+            if (otherObj.Balance > this.Balance)
+            {
+                return otherObj;
+            }
+            else return this;
+        }//instance method call like this: create Account class obj a1 and a2; a1 = a1.GetAccountWithMoreBalance(a2);
+
 
         //-------------------------//
-        public string PrivateSetExample
+        public string PrivateSetExample     //example for encapsulation
         {
             get
             {
