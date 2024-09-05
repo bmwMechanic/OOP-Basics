@@ -1,4 +1,6 @@
-﻿namespace InheritanceDemoApp
+﻿using System.Threading.Channels;
+
+namespace InheritanceDemoApp
 {
     internal class Program
     {
@@ -6,15 +8,43 @@
         {
             //Console.WriteLine(Child.Zahl);  //Child inherited Zahl 
 
-            Child c = new Child();
-            Child cc = new Child(1,2,3,4);
+            Parent p; Child c = new Child();    //parent p ref to Child clas obj and Chilc c ref to Chíld class object
+            p = new Child(1,2,3,4); /**I want Child class object with Parent Functionality*/
+            //c = new Parent(); //still not possible
+            int n, m; byte b = 100; n = b; Console.WriteLine(n);    //byte can implicitly be converted to int, but not the other way!
+            // c = new Parent(); IS WRONG b/c Child class variable 'c' cannot access PubB from Parent object! 
+            //  p.PubB does not exist.
+            p = c;   //what is happening here? all possible values for c are valid for p...
+            // c is a Child class reference variable, p can ref to Parent class and to Child class!
+            //c=p would mean that Parent class reference variable (p), c can refer to Parent Class and Child class. C CANNOT REFER to PARENT CLASSS 
+
+            Parent p2 = new Child(1,2,3,4);
+            //p2.PubB does not exist either! b/c p and p2 have only access to Parent Class Members. Why then create Child class obj..?
+            /** that's why:
+             * The reason you might still want to create a Child object and reference it with a Parent variable is to take advantage of polymorphism. This allows you to write more flexible and reusable code.
+             * For example, you can pass a Child object to a method that expects a Parent parameter, and the method can work with any object that is derived from Parent.
+             * 
+             * VERY IMPORTANT for OOP!
+             * 
+             */
+
+
+            /** explanation: Phone<-MobilePhone<-SmartPhone
+             * Phone ph = new MobilePhone(); ph.Call(); // works
+             * MobilePhone mb = new SmartPhone; mb.Browse(); //works
+             * SmartPhone sp = new MobilePhone(); sp.Browse(); //not possible! a MobilePhone object CANNOT BROWSE
+             */
+
+            /** Parent Variable p can be assigned to Child class object; "Parent is Child"
+             * Child Variable cannot be assigned to a Parent class object
+             */
 
             /** what happens at parameterized Child class Instantiation is:
              * 1. touch param constr. Child class (not run)
              * 2. run paramLESS constr. Parent class
              * 3. run parameterized constr. Child
              * finished. At no point of time there was the parameterized Constr. Parent class even touched. I checked with paramLESS constr. Parent class only!
-             * CHILD class Constr. OVERRIDES Parent class paramLSS constructor!!! i.e. set PubA @ Parent constr to 1 and PubA @ Child constr to 2.
+             * CHILD class Constr. OVERRIDES Parent class paramLESS constructor!!! i.e. set PubA @ Parent constr to 1 and PubA @ Child constr to 2.
              */
 
             /** what happens at parameterized Child class Instantiation with ':base(PriA,ProA,PubA)'
@@ -42,8 +72,6 @@
              * 
              */
 
-            cc.Foo();
-
             /** Notes by Mr. Sandeep Soni
              * The Protected member of Parent Class cannot be accessed in a Child class method that instantiates Parent p = new Parent(); inside Child class this is not possible: ## p.ProA = 10; ##
              * When an object of Child class is created all the data members of the Child and the Parent class are put into allocated memory no matter whether they are Private or Protected or Public
@@ -56,6 +84,8 @@
              * 
              * Plus there's some specialties to if I want or do not want to have a paramLESS constr @Parent class
              * if I do not want one: delete ':this()' @parameterized Constr @Parent class and add to Child paramLESS Constr. '_base(0,0,0)'!
+             * ...if there is no paramLESS Constr. @Parent class, EVERY Child class Constr. must explicotly link to any other Constr. @Parent class 
+             * 
              */
         }
     }
