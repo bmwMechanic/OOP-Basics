@@ -6,17 +6,89 @@ namespace InheritanceDemoApp
     {
         static void Main(string[] args)
         {
+            CParent pp = new CChild();
+
+            //*STATIC* Binding
+            int bb = pp.FootooStatBind();
+            /**   COMPILE TIME - decisions based upon DataType!
+             *  sooo.. CPARENT Pointer p leads to CPARENT Functionality for Object CChild!
+             *  CParent Functionality? well then: FootooStatBind = 10
+             *  in STATIC BINDING the pointer Functionality is important no matter the 'new'-Methods in CChild and CGrandChild class! ;)
+             */
+
+            //*DYNAMIC* Binding:
+            int aa = pp.Footoo(); //CParent Pointer pp: so CParent FUNCTIONALITY; so ==1; WELL....... I was wrong
+            /**   RUNTIME! - decisions based upon Object Type!
+             *  so it's probably the CChild's Footoo-Method, b/c it's overriding CParent Footoo-Method - yes!
+             *  But I still don't know why! It's a CParent Pointer, so should have CParent Functionality!?
+             *  CParent<--CChild<--CGrandChild. as of right now: virtual<--override<--override.
+             *  so we have Dynamic Binding happening here. 
+             *  
+             *  CAREFUL: virtual<--new means: Static, CompileTime, DataType, CPARENT Functionaliy!
+             *           virtual<--override: Dynamic, RunTime, Object Type, CChild Functionality!
+             */
+            /*   Abstraction      
+            int a = 2;
+            //AB ab = new AB(); ab.Method(ref a);   //let's try to make AB static...
+            AB.Method(ref a);   //a = 10
+            ABC.Method(ref a);  //Calling this non-abstract method in abstract class; a=5
+            //ABCD.Method(ref a); //Abstract is there for Inheritance and Copy Member in new inherited Classes Purposes!
+            Console.WriteLine(a); //a=5;
+            */
             //Console.WriteLine(Child.Zahl);  //Child inherited Zahl 
 
             Parent p; Child c = new Child();    //parent p ref to Child clas obj and Chilc c ref to Chíld class object
-            p = new Child(1,2,3,4); /**I want Child class object with Parent Functionality*/
+            p = new Child(1,2,3,4); /**I want Child class object with Parent Functionality, that means: incl. ALL PRIVATE fields and Private Methods!!!*/
             //c = new Parent(); //still not possible
             int n, m; byte b = 100; n = b; Console.WriteLine(n);    //byte can implicitly be converted to int, but not the other way!
             // c = new Parent(); IS WRONG b/c Child class variable 'c' cannot access PubB from Parent object! 
             //  p.PubB does not exist.
-            p = c;   //what is happening here? all possible values for c are valid for p...
-            // c is a Child class reference variable, p can ref to Parent class and to Child class!
-            //c=p would mean that Parent class reference variable (p), c can refer to Parent Class and Child class. C CANNOT REFER to PARENT CLASSS 
+            p = c;   //what is happening here? it's IMPLICIT CASTING! Parent Private MEMBERS accessible from within!
+            /* c is a Child class reference variable, p can ref to Parent class and to Child class!
+             * c=p would mean that Child class reference variable (c) can refer to Parent Class and Child class, but 'c' CANNOT REFER to PARENT CLASSS 
+             * dem Parent wird ein Child-Obj zugewiesen ('c# steht als Referenz für Child class object da!)
+             * dem Child kann kein Parent Class object zugewiesen werden, da das Parent-Obj. nicht die Funktionen und Parameter hat, auf die 'c' Zugriff hätte!
+            */
+            /** Third: ?? - Operator:     object y = x ?? z;
+             * If x is !null then x will be assigned to y else z will be assigned to y!
+             * what about c=(p as Child) ?? z;   ?  YESS!
+             * tries to cast, if successful: c=(Child)p; else c = z which is another ref to a Child class obj!
+             */
+
+            /** Funktionsweise des AS-Operators:  c = p as Child; +++ IS-Operator +++
+             * if(px is Child) { c = (Child)px; } else { c = null; } //c=null
+             * If px is referring to object of Class Child or Class GrandChild make (explicit) DownCast else set c to null.
+             * 
+             * if(p is Child) { c = (Child)p; } else { c = null; } //c= Downcasted (Child)p :)
+             * use AS operator when the code gets complicated. Cast only when 100% sure!
+             */
+
+            /** Now that I got it, let's take a look at AS-Operators
+             * I know I can do this here:  c=(Child)p IF 'p' was assigned a Child class object before. Now what is 'c = p as Child;'?
+             * c = p as Child; Console.WriteLine(p); //OUTPUTs: Child!
+             * now let's take Parent px = new PARENT(); and do this:  c = px as Child; AS is an Operator, it's not Casting directly
+             * Console.WriteLine(c.getType()); //OUTPUTs: EXCEPTION. What does it mean? CAST HAS FAILED. Null was returned.
+             * FUN: Console.WriteLine(c==null); //OUTPUTs: TRUE
+             */
+            Parent px = new Parent();
+            // nope: c = (px as Child)? /*c=*/(Child)p : c=null;
+            if(px is Child) { c = (Child)px; } else { c = null; } //same as: c=px as Child :))
+            Child z = new Child();
+            c = (p as Child) ?? z;  // THIS IS POSSIBLE!!!
+
+
+
+            /** We can do Explicit Casting like this:
+             * c = (Child)p; works b/c 'p' is a ref var for a CHILD Class Object!
+             * Side Effects are: if p refers to instantance Child class this works. If the p was to refer to a Parent class object, this would not work.
+             * This is called Down-Casting. Here I want Child Functionality BACK! So EITHER full Child Functionality w/ Child Var OR PARENT FULL Functionality (Privte Members) w/Parent class Var!
+             * Parent-To-Child-Casting --> must be EXPLICIT like this: c = (Child)p; DOWNCASTING only by EXPLICIT Casting!
+             * Child-To-Parent-Casting can be Implicit --> p = c; b/c 'p' already pointed to Child class object!
+             * Child-Var = Parent-Var CAN NEVER WORK, except with Downcasting, when Parent-Var was assigned a Child class object!     
+             */
+
+            Parent p3 = new Parent();
+            // No: Child c3 = new Parent();
 
             Parent p2 = new Child(1,2,3,4);
             //p2.PubB does not exist either! b/c p and p2 have only access to Parent Class Members. Why then create Child class obj..?
