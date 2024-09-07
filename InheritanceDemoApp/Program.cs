@@ -6,7 +6,36 @@ namespace InheritanceDemoApp
     {
         static void Main(string[] args)
         {
+            /** displayed ALL IN ONE
+             * Parent<--Child<--GrandChild;
+             * 
+             * none<--new<--new
+             * none<--new virtual<-- new OR override
+             * new virtual: new in respect to Parent, virtual in respect to next inheriting class here GrandChild
+             * 
+             * 
+             * 
+             * virtual<--new<--new
+             * virtual<--new virtual<--new OR override: Child new: b/c of new, we can have new in GrandChild, b/c of virtual we can have override in GrandChild!
+             * virtual<--override<--new OR override.
+             * virtual<--override sealed<--new ONLY (b/c override was sealed!)
+             * 
+             */
+
+            /** Summary
+             * using ref var of type CParent - Child class method is only exectuted when
+             * 1. the actual object is of type CChild! so CParent p = new CChild() and
+             * 2. Child class method OVERRIDES virtual method of CParent Class!
+             */
+
             CParent pp = new CChild();
+            /** about *NEW*
+             * new method is only accessed by class object itself with it's own class pointer variable!
+             * The new keyword hides the parent class method when accessed through a child class reference.
+             * When you call the method on a parent class reference, the parent class method is executed,
+             * b/c then the CChild class method is hidden? YES
+             * So *new* is hiding based on CParent or CChild TYPE Variable
+             */
 
             //*STATIC* Binding
             int bb = pp.FootooStatBind();
@@ -24,17 +53,11 @@ namespace InheritanceDemoApp
              *  CParent<--CChild<--CGrandChild. as of right now: virtual<--override<--override.
              *  so we have Dynamic Binding happening here. 
              *  
-             *  CAREFUL: virtual<--new means: Static, CompileTime, DataType, CPARENT Functionaliy!
-             *           virtual<--override: Dynamic, RunTime, Object Type, CChild Functionality!
+             *  CAREFUL: virtual<--new means: Dynamic BUT, CompileTime, DataType (Poiter Variable), CPARENT Functionaliy! b/c *new* HIDES the method in CChild?!(compare to static binding l.16).
+             *           virtual<--override: Dynamic, RunTime, Object Type (new CChild OR new CParent says which method is being called), CChild Functionality!
              */
-            /*   Abstraction      
-            int a = 2;
-            //AB ab = new AB(); ab.Method(ref a);   //let's try to make AB static...
-            AB.Method(ref a);   //a = 10
-            ABC.Method(ref a);  //Calling this non-abstract method in abstract class; a=5
-            //ABCD.Method(ref a); //Abstract is there for Inheritance and Copy Member in new inherited Classes Purposes!
-            Console.WriteLine(a); //a=5;
-            */
+
+            
             //Console.WriteLine(Child.Zahl);  //Child inherited Zahl 
 
             Parent p; Child c = new Child();    //parent p ref to Child clas obj and Chilc c ref to Chíld class object

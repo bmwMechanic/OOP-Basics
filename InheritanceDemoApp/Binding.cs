@@ -13,6 +13,11 @@ namespace InheritanceDemoApp
         /** STATIC and DYNAMIC Binding(inheritance);  key words: 'new', 'virtual', 'override', 'sealed', 'abstract'(if abstr. whole class must be abstract)
          * private new is possible! private virtual/override IS NOT possible! Nor is private abstract class allowed!
          */
+        /** if multiple 
+         *               static void Main(string[] args) { }
+         *                                                    exist
+         * press ALT+ENTER to access Project Properties. Select Startup-Project (that Main will then be called!)
+         */
     }
     
 
@@ -21,7 +26,7 @@ namespace InheritanceDemoApp
         public void Foo() { }   //a method of Parent class...
         //public void Foo(int a) { }  //Method OverLOADING
         public virtual int Footoo() { return 1; }
-        public int FootooStatBind() { return 10; }
+        public int FootooStatBind() { return 10; }  //this cannot be commented out; pp needs to have a valid CParent Method!
     }
 
     public class CChild : CParent //... is overloaded in Child class!
