@@ -84,10 +84,17 @@ namespace InheritanceDemoApp
             private double sidelength;
             public double Dimension { get { return this.sidelength; } set { this.sidelength = value; } }
             public Square(double sidelength) { this.Dimension = sidelength; }
-            double IFigure.getPerimeter()   //EXPLICITIMPLEMENTATION, also public?
+            //double IFigure.getPerimeter()   //EXPLICITIMPLEMENTATION, also public? no. But when which? this topic now!
+            public double getPerimeter()    //when Square obj via Square or IFigure variable is instantialized this method will be called:
             {
                 return 4 * this.sidelength;
             }
         }
     }
 }
+
+/**  Polymorphism is i.e. ONE interface used by Two or More classes:
+ * obj of these classes can be called by Interface or Class var - 
+ * here is Polymorphism: depending on the var, different bodies of same method
+ * names are implemented!
+ */
